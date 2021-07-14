@@ -1,11 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:simple_graphql/app/modules/register/register_bloc.dart';
 import 'package:simple_graphql/app/modules/register/register_page.dart';
-import 'package:simple_graphql/app/modules/register/register_store.dart';
 
 class RegisterModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => RegisterStore()),
+    Bind.lazySingleton((i) => RegisterBloc()),
   ];
 
   @override

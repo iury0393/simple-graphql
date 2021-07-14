@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mobx/mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-part 'register_store.g.dart';
-
-class RegisterStore = _RegisterStoreBase with _$RegisterStore;
-
-abstract class _RegisterStoreBase with Store {
+class RegisterBloc extends Disposable {
   TextEditingController textFirstNameController = TextEditingController();
   TextEditingController textLastNameController = TextEditingController();
   TextEditingController textEmailController = TextEditingController();
   TextEditingController textPasswordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  @observable
-  int value = 0;
-
-  @action
-  void increment() {
-    value++;
-  }
+  @override
+  void dispose() {}
 }

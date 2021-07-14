@@ -2,100 +2,138 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:simple_graphql/app/modules/register/register_store.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:simple_graphql/app/modules/register/register_bloc.dart';
+import 'package:simple_graphql/app/shared/graphQLConf.dart';
+import 'package:simple_graphql/app/shared/query_mutation.dart';
 
 class RegisterPage extends StatefulWidget {
-  final String title;
-  const RegisterPage({Key? key, this.title = 'RegisterPage'}) : super(key: key);
   @override
   RegisterPageState createState() => RegisterPageState();
 }
 
-class RegisterPageState extends ModularState<RegisterPage, RegisterStore> {
+class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
+  GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
+  QueryMutation addMutation = QueryMutation();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () => Modular.to.pop(),
-                  icon: Icon(Icons.arrow_back, size: 25),
+          child: Form(
+            key: controller.formKey,
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    onPressed: () => Modular.to.pop(),
+                    icon: Icon(Icons.arrow_back, size: 25),
+                  ),
                 ),
-              ),
-              Image.asset('assets/img3.jpg'),
-              Text(
-                'Simple GraphQl Register',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                Image.asset('assets/img3.jpg'),
+                Text(
+                  'Simple GraphQl Register',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: BuildTextFormField(
-                  mainController: controller.textFirstNameController,
-                  isPassword: false,
-                  hint: 'Nome',
-                  formKey: controller.formKey,
-                  prefixIcon: Icon(Icons.person, color: Colors.black),
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: BuildTextFormField(
+                    mainController: controller.textFirstNameController,
+                    isPassword: false,
+                    hint: 'Nome',
+                    formKey: controller.formKey,
+                    prefixIcon: Icon(Icons.person, color: Colors.black),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: BuildTextFormField(
-                  mainController: controller.textLastNameController,
-                  isPassword: false,
-                  hint: 'Sobrenome',
-                  formKey: controller.formKey,
-                  prefixIcon: Icon(Icons.person, color: Colors.black),
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: BuildTextFormField(
+                    mainController: controller.textLastNameController,
+                    isPassword: false,
+                    hint: 'Sobrenome',
+                    formKey: controller.formKey,
+                    prefixIcon: Icon(Icons.person, color: Colors.black),
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: BuildTextFormField(
-                  mainController: controller.textEmailController,
-                  isPassword: false,
-                  hint: 'Email',
-                  formKey: controller.formKey,
-                  prefixIcon: Icon(Icons.mail, color: Colors.black),
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: BuildTextFormField(
+                    mainController: controller.textEmailController,
+                    isPassword: false,
+                    hint: 'Email',
+                    formKey: controller.formKey,
+                    prefixIcon: Icon(Icons.mail, color: Colors.black),
+                  ),
                 ),
-              ),
-              SizedBox(height: 15),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: BuildTextFormField(
-                  mainController: controller.textPasswordController,
-                  isPassword: true,
-                  hint: 'Senha',
-                  formKey: controller.formKey,
-                  prefixIcon: Icon(Icons.lock_open, color: Colors.black),
+                SizedBox(height: 15),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: BuildTextFormField(
+                    mainController: controller.textPasswordController,
+                    isPassword: true,
+                    hint: 'Senha',
+                    formKey: controller.formKey,
+                    prefixIcon: Icon(Icons.lock_open, color: Colors.black),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                height: 42.0,
-                width: 150.0,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(30.0)),
-                child: IconButton(
-                  icon: Icon(FeatherIcons.check),
-                  onPressed: () {},
+                SizedBox(
+                  height: 30,
                 ),
-              ),
-            ],
+                Container(
+                  height: 42.0,
+                  width: 150.0,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(30.0)),
+                  child: IconButton(
+                    icon: Icon(FeatherIcons.check),
+                    onPressed: () async {
+                      if (controller.formKey.currentState!.validate()) {
+                        GraphQLClient _client =
+                            graphQLConfiguration.clientToQuery();
+                        QueryResult result = await _client.mutate(
+                          MutationOptions(
+                            document: gql(addMutation.register(
+                              controller.textFirstNameController.text,
+                              controller.textLastNameController.text,
+                              controller.textEmailController.text,
+                              controller.textPasswordController.text,
+                            )),
+                          ),
+                        );
+
+                        if (result.hasException) {
+                          print(result.exception.toString());
+                        }
+
+                        if (result.isLoading) {
+                          print('Loading');
+                        }
+
+                        if (result.isNotLoading) {
+                          print('Loading Not');
+                        }
+
+                        if (result.isConcrete) {
+                          print('Sucesso');
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
