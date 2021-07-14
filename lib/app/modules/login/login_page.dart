@@ -66,9 +66,10 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
                           borderRadius: BorderRadius.circular(30.0)),
                       child: IconButton(
                         icon: Icon(FeatherIcons.logIn),
-                        onPressed: () {
+                        onPressed: () async {
                           if (controller.formKey.currentState!.validate()) {
-                            print('Log-In');
+                            var result = await controller.doLogin();
+                            print(result['login']['token']);
                           }
                         },
                       ),

@@ -1,23 +1,22 @@
 class QueryMutation {
-  String login(String email, String password) {
+  String login() {
     return """
-      mutation{
-        login(email: "$email", password: "$password"){
+      mutation(\$email: String!, \$password: String!){
+        login(email: \$email, password: \$password){
           token
         }
       }
     """;
   }
 
-  String register(
-      String firstName, String lastName, String email, String password) {
+  String register() {
     return """
-      mutation{
+      mutation(\$firstName: String!, \$lastName: String!, \$email: String!, \$password: String!){
         createUser(input: {
-          firstName: "$firstName",
-          lastName: "$lastName",
-          email: "$email",
-          password: "$password"
+          firstName: "\$firstName",
+          lastName: "\$lastName",
+          email: "\$email",
+          password: "\$password"
         }){
           id,
           firstName

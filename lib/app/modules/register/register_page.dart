@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:simple_graphql/app/modules/register/register_bloc.dart';
-import 'package:simple_graphql/app/shared/graphQLConf.dart';
-import 'package:simple_graphql/app/shared/query_mutation.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -13,9 +10,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
-  GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
-  QueryMutation addMutation = QueryMutation();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,34 +94,8 @@ class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
                     icon: Icon(FeatherIcons.check),
                     onPressed: () async {
                       if (controller.formKey.currentState!.validate()) {
-                        GraphQLClient _client =
-                            graphQLConfiguration.clientToQuery();
-                        QueryResult result = await _client.mutate(
-                          MutationOptions(
-                            document: gql(addMutation.register(
-                              controller.textFirstNameController.text,
-                              controller.textLastNameController.text,
-                              controller.textEmailController.text,
-                              controller.textPasswordController.text,
-                            )),
-                          ),
-                        );
-
-                        if (result.hasException) {
-                          print(result.exception.toString());
-                        }
-
-                        if (result.isLoading) {
-                          print('Loading');
-                        }
-
-                        if (result.isNotLoading) {
-                          print('Loading Not');
-                        }
-
-                        if (result.isConcrete) {
-                          print('Sucesso');
-                        }
+                        var result = await controller.doRegister();
+                        print(result);
                       }
                     },
                   ),
