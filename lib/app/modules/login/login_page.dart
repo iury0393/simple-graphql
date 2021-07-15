@@ -28,7 +28,7 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
     return Scaffold(
       body: SafeArea(
         child: loading
-            ? CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Form(
                   key: controller.formKey,
@@ -84,8 +84,7 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
                               onPressed: () async {
                                 if (controller.formKey.currentState!
                                     .validate()) {
-                                  var result = await controller.doLogin();
-                                  print(result['login']['token']);
+                                  await controller.doLogin();
                                 }
                               },
                             ),

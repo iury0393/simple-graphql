@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_graphql/app/shared/graphQLConf.dart';
 import 'package:simple_graphql/app/shared/query_mutation.dart';
+import 'package:simple_graphql/app/shared/user.dart';
 
 class LoginBloc extends Disposable {
   TextEditingController textEmailController = TextEditingController();
@@ -15,6 +17,8 @@ class LoginBloc extends Disposable {
 
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
   QueryMutation addMutation = QueryMutation();
+
+  late User user;
 
   @override
   void dispose() {
@@ -39,7 +43,6 @@ class LoginBloc extends Disposable {
           },
         ),
       );
-
       if (result.hasException) {
         print(result.exception.toString());
       }
@@ -54,9 +57,21 @@ class LoginBloc extends Disposable {
 
       if (result.isConcrete) {
         print('Sucesso');
-        _showLoadingBS.sink.add(false);
+      }
+
+      if (resultado['login']['token'] != '') {
+        Fluttertoast.showToast(
+            msg: 'Logado com sucesso',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 2,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 20.0);
         _navigateToNextPageBS.sink.add('/info');
       }
+      _showLoadingBS.sink.add(false);
+
       return resultado;
     } catch (e) {
       _showLoadingBS.sink.add(false);

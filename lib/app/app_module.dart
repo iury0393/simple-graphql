@@ -1,7 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:simple_graphql/app/modules/register/register_module.dart';
 
+import 'modules/info/info_module.dart';
 import 'modules/login/login_module.dart';
+import 'modules/register/register_module.dart';
 
 class AppModule extends Module {
   @override
@@ -11,6 +12,6 @@ class AppModule extends Module {
   final List<ModularRoute> routes = [
     ModuleRoute('/', module: LoginModule()),
     ModuleRoute('/register', module: RegisterModule()),
-    ModuleRoute('/info', module: RegisterModule()),
+    ModuleRoute('/info', module: InfoModule()),
   ];
 }

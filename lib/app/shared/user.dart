@@ -3,22 +3,17 @@ class User {
   final String firstName;
   final String lastName;
   final String email;
-  final String password;
-  final String token;
 
   User({
-    this.id = '',
-    this.firstName = '',
-    this.lastName = '',
-    this.email = '',
-    this.password = '',
-    this.token = '',
+    required this.id,
+    required this.firstName,
+    required this.lastName,
+    required this.email,
   });
 }
 
 class UserLogin {
-  final String email;
-  final String password;
+  final String token;
 
-  UserLogin({required this.email, required this.password});
+  UserLogin({required this.token});
 }
