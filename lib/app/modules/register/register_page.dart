@@ -10,102 +10,130 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    _setupStreams();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () => Modular.to.pop(),
-                    icon: Icon(Icons.arrow_back, size: 25),
-                  ),
-                ),
-                Image.asset('assets/img3.jpg'),
-                Text(
-                  'Simple GraphQl Register',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textFirstNameController,
-                    isPassword: false,
-                    hint: 'Nome',
-                    formKey: controller.formKey,
-                    prefixIcon: Icon(Icons.person, color: Colors.black),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textLastNameController,
-                    isPassword: false,
-                    hint: 'Sobrenome',
-                    formKey: controller.formKey,
-                    prefixIcon: Icon(Icons.person, color: Colors.black),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textEmailController,
-                    isPassword: false,
-                    hint: 'Email',
-                    formKey: controller.formKey,
-                    prefixIcon: Icon(Icons.mail, color: Colors.black),
-                  ),
-                ),
-                SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textPasswordController,
-                    isPassword: true,
-                    hint: 'Senha',
-                    formKey: controller.formKey,
-                    prefixIcon: Icon(Icons.lock_open, color: Colors.black),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  height: 42.0,
-                  width: 150.0,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1,
+        child: loading
+            ? CircularProgressIndicator()
+            : SingleChildScrollView(
+                child: Form(
+                  key: controller.formKey,
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () => Modular.to.pop(),
+                          icon: Icon(Icons.arrow_back, size: 25),
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(30.0)),
-                  child: IconButton(
-                    icon: Icon(FeatherIcons.check),
-                    onPressed: () async {
-                      if (controller.formKey.currentState!.validate()) {
-                        var result = await controller.doRegister();
-                        print(result);
-                      }
-                    },
+                      Image.asset('assets/img3.jpg'),
+                      Text(
+                        'Simple GraphQl Register',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textFirstNameController,
+                          isPassword: false,
+                          hint: 'Nome',
+                          formKey: controller.formKey,
+                          prefixIcon: Icon(Icons.person, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textLastNameController,
+                          isPassword: false,
+                          hint: 'Sobrenome',
+                          formKey: controller.formKey,
+                          prefixIcon: Icon(Icons.person, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textEmailController,
+                          isPassword: false,
+                          hint: 'Email',
+                          formKey: controller.formKey,
+                          prefixIcon: Icon(Icons.mail, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textPasswordController,
+                          isPassword: true,
+                          hint: 'Senha',
+                          formKey: controller.formKey,
+                          prefixIcon:
+                              Icon(Icons.lock_open, color: Colors.black),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Container(
+                        height: 42.0,
+                        width: 150.0,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(30.0)),
+                        child: IconButton(
+                          icon: Icon(FeatherIcons.check),
+                          onPressed: () async {
+                            if (controller.formKey.currentState!.validate()) {
+                              var result = await controller.doRegister();
+                              print(result);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
+  }
+
+  _setupStreams() {
+    controller.showLoadingOutput.listen((value) async {
+      if (value) {
+        setState(() {
+          loading = true;
+        });
+      } else {
+        Modular.to.pop();
+      }
+    });
   }
 }
 

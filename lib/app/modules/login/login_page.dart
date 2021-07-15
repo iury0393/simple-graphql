@@ -10,95 +10,130 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
+  bool loading = false;
+  @override
+  void initState() {
+    super.initState();
+    _setupStreams();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: controller.formKey,
-            child: Column(
-              children: [
-                Image.asset('assets/img.jpg'),
-                Text(
-                  'Simple GraphQl Login',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textEmailController,
-                    secondController: controller.textPasswordController,
-                    isPassword: false,
-                    hint: 'Email',
-                    formKey: controller.formKey,
-                  ),
-                ),
-                SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: BuildTextFormField(
-                    mainController: controller.textPasswordController,
-                    secondController: controller.textEmailController,
-                    isPassword: true,
-                    hint: 'Senha',
-                    formKey: controller.formKey,
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 42.0,
-                      width: 150.0,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(30.0)),
-                      child: IconButton(
-                        icon: Icon(FeatherIcons.logIn),
-                        onPressed: () async {
-                          if (controller.formKey.currentState!.validate()) {
-                            var result = await controller.doLogin();
-                            print(result['login']['token']);
-                          }
-                        },
+        child: loading
+            ? CircularProgressIndicator()
+            : SingleChildScrollView(
+                child: Form(
+                  key: controller.formKey,
+                  child: Column(
+                    children: [
+                      Image.asset('assets/img.jpg'),
+                      Text(
+                        'Simple GraphQl Login',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Container(
-                      height: 42.0,
-                      width: 150.0,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1,
-                          ),
-                          borderRadius: BorderRadius.circular(30.0)),
-                      child: IconButton(
-                        icon: Icon(FeatherIcons.checkCircle),
-                        onPressed: () => Modular.to.pushNamed('/register'),
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textEmailController,
+                          secondController: controller.textPasswordController,
+                          isPassword: false,
+                          hint: 'Email',
+                          formKey: controller.formKey,
+                        ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 15),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BuildTextFormField(
+                          mainController: controller.textPasswordController,
+                          secondController: controller.textEmailController,
+                          isPassword: true,
+                          hint: 'Senha',
+                          formKey: controller.formKey,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 42.0,
+                            width: 150.0,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: IconButton(
+                              icon: Icon(FeatherIcons.logIn),
+                              onPressed: () async {
+                                if (controller.formKey.currentState!
+                                    .validate()) {
+                                  var result = await controller.doLogin();
+                                  print(result['login']['token']);
+                                }
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            height: 42.0,
+                            width: 150.0,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0)),
+                            child: IconButton(
+                              icon: Icon(FeatherIcons.checkCircle),
+                              onPressed: () =>
+                                  Modular.to.pushNamed('/register'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
+  }
+
+  _setupStreams() {
+    controller.showLoadingOutput.listen((value) async {
+      if (value) {
+        setState(() {
+          loading = true;
+        });
+      }
+    });
+
+    controller.navigateToNextPageOutput.listen((value) async {
+      _doNavigateToNextPage(value);
+    });
+  }
+
+  _doNavigateToNextPage(String pageRouter) {
+    Modular.to.navigate(pageRouter);
   }
 }
 

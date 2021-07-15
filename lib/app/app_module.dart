@@ -9,7 +9,8 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute(Modular.initialRoute, module: LoginModule()),
+    ModuleRoute('/', module: LoginModule()),
     ModuleRoute('/register', module: RegisterModule()),
+    ModuleRoute('/info', module: RegisterModule()),
   ];
 }
