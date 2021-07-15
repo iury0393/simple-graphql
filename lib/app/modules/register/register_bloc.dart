@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_graphql/app/shared/graphQLConf.dart';
@@ -33,10 +34,12 @@ class RegisterBloc extends Disposable {
         MutationOptions(
           document: gql(addMutation.register()),
           variables: {
-            "firstName": textFirstNameController.text,
-            "lastName": textLastNameController.text,
-            "email": textEmailController.text,
-            "password": textPasswordController.text,
+            "input": {
+              "firstName": textFirstNameController.text,
+              "lastName": textLastNameController.text,
+              "email": textEmailController.text,
+              "password": textPasswordController.text
+            }
           },
           onCompleted: (dynamic resultData) {
             resultado = resultData;
@@ -58,9 +61,20 @@ class RegisterBloc extends Disposable {
 
       if (result.isConcrete) {
         print('Sucesso');
-        _showLoadingBS.sink.add(false);
-        _navigateToNextPageBS.sink.add('/info');
       }
+
+      if (resultado['createUser']['id'] != '') {
+        Fluttertoast.showToast(
+            msg: 'Registrado com sucesso',
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 2,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 20.0);
+      }
+
+      _showLoadingBS.sink.add(false);
       return resultado;
     } catch (e) {
       _showLoadingBS.sink.add(false);

@@ -28,7 +28,7 @@ class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
     return Scaffold(
       body: SafeArea(
         child: loading
-            ? CircularProgressIndicator()
+            ? Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Form(
                   key: controller.formKey,
