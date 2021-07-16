@@ -13,7 +13,6 @@ class RegisterBloc extends Disposable {
   TextEditingController textPasswordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  BehaviorSubject<String> _navigateToNextPageBS = BehaviorSubject();
   BehaviorSubject<bool> _showLoadingBS = BehaviorSubject();
 
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
@@ -21,16 +20,15 @@ class RegisterBloc extends Disposable {
 
   @override
   void dispose() {
-    _navigateToNextPageBS.close();
     _showLoadingBS.close();
   }
 
-  Future<dynamic> doRegister() async {
-    var resultado;
+  Future<void> doRegister() async {
+    late dynamic resultado;
     _showLoadingBS.sink.add(true);
     try {
-      GraphQLClient _client = graphQLConfiguration.clientToQuery();
-      QueryResult result = await _client.mutate(
+      final GraphQLClient _client = graphQLConfiguration.clientToQuery();
+      final QueryResult result = await _client.mutate(
         MutationOptions(
           document: gql(addMutation.register()),
           variables: {
@@ -48,19 +46,19 @@ class RegisterBloc extends Disposable {
       );
 
       if (result.hasException) {
-        print(result.exception.toString());
+        debugPrint(result.exception.toString());
       }
 
       if (result.isLoading) {
-        print('Loading');
+        debugPrint("Loading");
       }
 
       if (result.isNotLoading) {
-        print('Not Loading');
+        debugPrint("Not Loading");
       }
 
       if (result.isConcrete) {
-        print('Sucesso');
+        debugPrint("Sucesso");
       }
 
       if (resultado['insert_users_one']['id'] != '') {
@@ -75,10 +73,16 @@ class RegisterBloc extends Disposable {
       }
 
       _showLoadingBS.sink.add(false);
-      return resultado;
     } catch (e) {
       _showLoadingBS.sink.add(false);
-      print(e);
+      Fluttertoast.showToast(
+          msg: 'Erro em algum lugar',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20.0);
     }
   }
 

@@ -23,12 +23,12 @@ class LoginBloc extends Disposable {
     _showLoadingBS.close();
   }
 
-  Future<dynamic> doLogin() async {
-    var resultado;
+  Future<void> doLogin() async {
+    late dynamic resultado;
     _showLoadingBS.sink.add(true);
     try {
-      GraphQLClient _client = graphQLConfiguration.clientToQuery();
-      QueryResult result = await _client.mutate(
+      final GraphQLClient _client = graphQLConfiguration.clientToQuery();
+      final QueryResult result = await _client.mutate(
         MutationOptions(
           document: gql(addMutation.login()),
           variables: {
@@ -41,19 +41,19 @@ class LoginBloc extends Disposable {
         ),
       );
       if (result.hasException) {
-        print(result.exception.toString());
+        debugPrint(result.exception.toString());
       }
 
       if (result.isLoading) {
-        print('Loading');
+        debugPrint("Loading");
       }
 
       if (result.isNotLoading) {
-        print('Not Loading');
+        debugPrint("Not Loading");
       }
 
       if (result.isConcrete) {
-        print('Sucesso');
+        debugPrint("Sucesso");
       }
 
       if (resultado['users'][0]['id'] != '') {
@@ -68,11 +68,16 @@ class LoginBloc extends Disposable {
         _navigateToNextPageBS.sink.add('/info');
       }
       _showLoadingBS.sink.add(false);
-
-      return resultado;
     } catch (e) {
       _showLoadingBS.sink.add(false);
-      print(e);
+      Fluttertoast.showToast(
+          msg: 'Erro em algum lugar',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20.0);
     }
   }
 

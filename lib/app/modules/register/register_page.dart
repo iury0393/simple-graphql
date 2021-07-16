@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:simple_graphql/app/modules/register/register_bloc.dart';
@@ -107,11 +106,10 @@ class RegisterPageState extends ModularState<RegisterPage, RegisterBloc> {
                             ),
                             borderRadius: BorderRadius.circular(30.0)),
                         child: IconButton(
-                          icon: Icon(FeatherIcons.check),
+                          icon: Icon(Icons.check),
                           onPressed: () async {
                             if (controller.formKey.currentState!.validate()) {
-                              var result = await controller.doRegister();
-                              print(result);
+                              await controller.doRegister();
                             }
                           },
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_graphql/app/modules/info/info_bloc.dart';
@@ -29,6 +30,10 @@ class InfoPageState extends ModularState<InfoPage, InfoBloc> {
     return Scaffold(
       appBar: AppBar(
         title: Text('GraphQl'),
+        leading: IconButton(
+          onPressed: () => Modular.to.pushNamed('/video'),
+          icon: Icon(Icons.video_call),
+        ),
         actions: [
           IconButton(
               onPressed: () => Modular.to.navigate('/'),
@@ -44,49 +49,62 @@ class InfoPageState extends ModularState<InfoPage, InfoBloc> {
                   if (snapshot.hasData) {
                     return Padding(
                       padding: EdgeInsets.only(top: 5),
-                      child: ListView.separated(
-                        itemCount: snapshot.data!.length,
-                        separatorBuilder: (context, index) => Divider(
-                          color: Colors.black,
-                        ),
-                        itemBuilder: (context, index) {
-                          DateTime dateGraphQl = DateTime.parse(
-                              snapshot.data![index]['created_at']);
+                      child: AnimationLimiter(
+                        child: ListView.separated(
+                          itemCount: snapshot.data!.length,
+                          separatorBuilder: (context, index) => Divider(
+                            color: Colors.black,
+                          ),
+                          itemBuilder: (context, index) {
+                            DateTime dateGraphQl = DateTime.parse(
+                                snapshot.data![index]['created_at']);
 
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: ListTile(
-                              title: Text(
-                                '${snapshot.data![index]['firstName']} ${snapshot.data![index]['lastName']}',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    '${snapshot.data![index]['email']}',
-                                    style: TextStyle(fontSize: 16),
+                            return AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 5),
+                                    child: ListTile(
+                                      title: Text(
+                                        '${snapshot.data![index]['firstName']} ${snapshot.data![index]['lastName']}',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${snapshot.data![index]['email']}',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          Text(
+                                            DateFormat('dd/MM/yyyy - hh:mm')
+                                                .format(dateGraphQl),
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                '${snapshot.data![index]['id']}',
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 2,
+                                            backgroundColor: Colors.green,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      },
+                                    ),
                                   ),
-                                  Text(
-                                    DateFormat('dd/MM/yyyy - hh:mm')
-                                        .format(dateGraphQl),
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ],
+                                ),
                               ),
-                              onTap: () {
-                                Fluttertoast.showToast(
-                                    msg: '${snapshot.data![index]['id']}',
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 2,
-                                    backgroundColor: Colors.green,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0);
-                              },
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     );
                   } else {

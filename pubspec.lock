@@ -146,13 +146,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_feather_icons:
-    dependency: "direct main"
-    description:
-      name: flutter_feather_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0+1"
   flutter_modular:
     dependency: "direct main"
     description:
@@ -167,13 +160,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.2"
-  flutter_modular_test:
-    dependency: "direct dev"
+  flutter_staggered_animations:
+    dependency: "direct main"
     description:
-      name: flutter_modular_test
+      name: flutter_staggered_animations
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -261,13 +254,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
-  hive_flutter:
-    dependency: "direct main"
-    description:
-      name: hive_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.0"
   http:
     dependency: transitive
     description:

@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_graphql/app/shared/graphQLConf.dart';
 import 'package:simple_graphql/app/shared/query_mutation.dart';
-import 'package:simple_graphql/app/shared/user.dart';
 
 class InfoBloc extends Disposable {
   BehaviorSubject<bool> _showLoadingBS = BehaviorSubject();
@@ -18,12 +19,12 @@ class InfoBloc extends Disposable {
     _showLoadingBS.close();
   }
 
-  Future getUsers() async {
-    var resultado;
+  Future<void> getUsers() async {
+    late List<dynamic> resultado;
     _showLoadingBS.sink.add(true);
     try {
-      GraphQLClient _client = graphQLConfiguration.clientToQuery();
-      QueryResult result = await _client.mutate(
+      final GraphQLClient _client = graphQLConfiguration.clientToQuery();
+      final QueryResult result = await _client.mutate(
         MutationOptions(
           document: gql(addMutation.getUsers()),
           onCompleted: (dynamic resultData) {
@@ -32,25 +33,32 @@ class InfoBloc extends Disposable {
         ),
       );
       if (result.hasException) {
-        print(result.exception.toString());
+        debugPrint(result.exception.toString());
       }
 
       if (result.isLoading) {
-        print('Loading');
+        debugPrint("Loading");
       }
 
       if (result.isNotLoading) {
-        print('Not Loading');
+        debugPrint("Not Loading");
       }
 
       if (result.isConcrete) {
-        print('Sucesso');
+        debugPrint("Sucesso");
       }
       _usersBS.sink.add(resultado);
       _showLoadingBS.sink.add(false);
     } catch (e) {
       _showLoadingBS.sink.add(false);
-      print(e);
+      Fluttertoast.showToast(
+          msg: 'Erro em algum lugar',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20.0);
     }
   }
 

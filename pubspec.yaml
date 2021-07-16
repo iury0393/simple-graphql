@@ -31,16 +31,14 @@ dependencies:
   graphql_flutter: ^5.0.0
   flutter_modular: ^3.3.1
   fluttertoast: ^8.0.7
-  flutter_feather_icons: ^2.0.0+1
   dio: ^4.0.0
   hive: ^2.0.4
-  hive_flutter: ^1.1.0
   rxdart: ^0.26.0
   path_provider: ^2.0.2
   intl: ^0.17.0
+  flutter_staggered_animations: ^1.0.0
 
 dev_dependencies:
-  flutter_modular_test: ^1.0.1
   flutter_test:
     sdk: flutter
 

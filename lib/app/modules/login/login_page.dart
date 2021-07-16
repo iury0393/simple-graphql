@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:simple_graphql/app/modules/login/login_bloc.dart';
@@ -80,7 +79,7 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
                                 ),
                                 borderRadius: BorderRadius.circular(30.0)),
                             child: IconButton(
-                              icon: Icon(FeatherIcons.logIn),
+                              icon: Icon(Icons.login),
                               onPressed: () async {
                                 if (controller.formKey.currentState!
                                     .validate()) {
@@ -102,7 +101,7 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
                                 ),
                                 borderRadius: BorderRadius.circular(30.0)),
                             child: IconButton(
-                              icon: Icon(FeatherIcons.checkCircle),
+                              icon: Icon(Icons.check_circle),
                               onPressed: () =>
                                   Modular.to.pushNamed('/register'),
                             ),
@@ -122,6 +121,10 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
       if (value) {
         setState(() {
           loading = true;
+        });
+      } else {
+        setState(() {
+          loading = false;
         });
       }
     });
