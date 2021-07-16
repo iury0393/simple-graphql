@@ -82,10 +82,11 @@ class _LoginPageState extends ModularState<LoginPage, LoginBloc> {
                             child: IconButton(
                               icon: Icon(FeatherIcons.logIn),
                               onPressed: () async {
-                                if (controller.formKey.currentState!
-                                    .validate()) {
-                                  await controller.doLogin();
-                                }
+                                Modular.to.pushNamed('/info');
+                                // if (controller.formKey.currentState!
+                                //     .validate()) {
+                                //   await controller.doLogin();
+                                // }
                               },
                             ),
                           ),

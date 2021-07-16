@@ -11,12 +11,28 @@ class QueryMutation {
 
   String register() {
     return """
-      mutation(\$input: NewUser!){
-        createUser(input: \$input){
-          id,
-          firstName,
-          lastName,
+      mutation(\$input: users_insert_input!){
+        insert_users_one(object: \$input) 
+          {
+            id
+            firstName
+            lastName
+            email
+            created_at
+          }
+      }
+      """;
+  }
+
+  String getUsers() {
+    return """
+      query(){
+        users(){
+          id
+          firstName
+          lastName
           email
+          created_at
         }
       }
 """;

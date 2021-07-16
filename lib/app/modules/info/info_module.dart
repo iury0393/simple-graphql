@@ -1,5 +1,5 @@
-import 'package:simple_graphql/app//modules/info/info_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:simple_graphql/app/modules/info/info_bloc.dart';
 import 'package:simple_graphql/app/modules/info/info_page.dart';
 
 class InfoModule extends Module {

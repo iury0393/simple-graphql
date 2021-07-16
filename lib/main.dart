@@ -8,14 +8,17 @@ import 'app/shared/graphQLConf.dart';
 
 GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
 
-void main() => runApp(
-      GraphQLProvider(
-        client: graphQLConfiguration.client,
-        child: CacheProvider(
-          child: ModularApp(
-            module: AppModule(),
-            child: AppWidget(),
-          ),
+void main() async {
+  await initHiveForFlutter();
+  runApp(
+    GraphQLProvider(
+      client: graphQLConfiguration.client,
+      child: CacheProvider(
+        child: ModularApp(
+          module: AppModule(),
+          child: AppWidget(),
         ),
       ),
-    );
+    ),
+  );
+}

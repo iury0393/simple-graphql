@@ -63,7 +63,7 @@ class RegisterBloc extends Disposable {
         print('Sucesso');
       }
 
-      if (resultado['createUser']['id'] != '') {
+      if (resultado['insert_users_one']['id'] != '') {
         Fluttertoast.showToast(
             msg: 'Registrado com sucesso',
             toastLength: Toast.LENGTH_LONG,

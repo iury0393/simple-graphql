@@ -5,7 +5,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:simple_graphql/app/shared/graphQLConf.dart';
 import 'package:simple_graphql/app/shared/query_mutation.dart';
-import 'package:simple_graphql/app/shared/user.dart';
 
 class LoginBloc extends Disposable {
   TextEditingController textEmailController = TextEditingController();
@@ -17,8 +16,6 @@ class LoginBloc extends Disposable {
 
   GraphQLConfiguration graphQLConfiguration = GraphQLConfiguration();
   QueryMutation addMutation = QueryMutation();
-
-  late User user;
 
   @override
   void dispose() {

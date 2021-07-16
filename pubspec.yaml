@@ -34,9 +34,10 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   dio: ^4.0.0
   hive: ^2.0.4
+  hive_flutter: ^1.1.0
   rxdart: ^0.26.0
-  bloc: 7.0.0-nullsafety.3
-  flutter_bloc: 7.0.0-nullsafety.3
+  path_provider: ^2.0.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_modular_test: ^1.0.1

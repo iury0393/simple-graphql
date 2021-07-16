@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:simple_graphql/app/modules/info/info_module.dart';
 
-import 'modules/info/info_module.dart';
 import 'modules/login/login_module.dart';
 import 'modules/register/register_module.dart';
 
