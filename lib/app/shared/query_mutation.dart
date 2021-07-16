@@ -1,11 +1,16 @@
 class QueryMutation {
   String login() {
     return """
-      mutation(\$email: String!, \$password: String!){
-        login(email: \$email, password: \$password){
-          token
-        }
+    query(\$email: String!, \$password: String!){
+      users(
+        where: { _and: [
+          {email: {_eq: \$email}}, 
+          {password: {_eq: \$password}}
+        ]}
+      ) {
+        id
       }
+    }
     """;
   }
 

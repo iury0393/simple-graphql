@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_graphql/app/modules/info/info_bloc.dart';
 
@@ -55,24 +56,16 @@ class InfoPageState extends ModularState<InfoPage, InfoBloc> {
                           return Padding(
                             padding: EdgeInsets.only(left: 5),
                             child: ListTile(
-                              title: Row(
-                                children: [
-                                  Text(
-                                    'Id: ${snapshot.data![index]['id']} - ',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                  Text(
-                                    '${snapshot.data![index]['firstName']} ${snapshot.data![index]['lastName']}',
-                                    style: TextStyle(fontSize: 18),
-                                  ),
-                                ],
+                              title: Text(
+                                '${snapshot.data![index]['firstName']} ${snapshot.data![index]['lastName']}',
+                                style: TextStyle(fontSize: 18),
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     '${snapshot.data![index]['email']}',
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(fontSize: 16),
                                   ),
                                   Text(
                                     DateFormat('dd/MM/yyyy - hh:mm')
@@ -81,6 +74,16 @@ class InfoPageState extends ModularState<InfoPage, InfoBloc> {
                                   ),
                                 ],
                               ),
+                              onTap: () {
+                                Fluttertoast.showToast(
+                                    msg: '${snapshot.data![index]['id']}',
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 2,
+                                    backgroundColor: Colors.green,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              },
                             ),
                           );
                         },

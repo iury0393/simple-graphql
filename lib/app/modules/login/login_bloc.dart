@@ -56,7 +56,7 @@ class LoginBloc extends Disposable {
         print('Sucesso');
       }
 
-      if (resultado['login']['token'] != '') {
+      if (resultado['users'][0]['id'] != '') {
         Fluttertoast.showToast(
             msg: 'Logado com sucesso',
             toastLength: Toast.LENGTH_LONG,
