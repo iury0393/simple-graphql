@@ -30,10 +30,6 @@ class InfoPageState extends ModularState<InfoPage, InfoBloc> {
     return Scaffold(
       appBar: AppBar(
         title: Text('GraphQl'),
-        leading: IconButton(
-          onPressed: () => Modular.to.pushNamed('/video'),
-          icon: Icon(Icons.video_call),
-        ),
         actions: [
           IconButton(
               onPressed: () => Modular.to.navigate('/'),
